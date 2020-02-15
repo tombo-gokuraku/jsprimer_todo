@@ -4,9 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>WebOre Todo</title>
+    <link
+      rel="stylesheet"
+      href="https://jsprimer.net/use-case/todoapp/final/final/index.css"
+      type="text/css"
+      media="screen"
+      title="no title"
+      charset="utf-8"
+    />
   </head>
   <body>
     <h1>Todo App</h1>
+    <div class="todoapp">
+      <form id="js-form" action="">
+        <input
+          id="js-form-input"
+          class="new-todo"
+          type="text"
+          placeholder="What need to be done?"
+          autocomplete="off"
+        />
+      </form>
+      <div id="js-todo-list" class="todo-list"></div>
+      <footer class="footer">
+        <span id="js-todo-count">Todoアイテム数: 0</span>
+      </footer>
+    </div>
     <script src="index.js" charset="utf-8" type="module"></script>
   </body>
 </html>
