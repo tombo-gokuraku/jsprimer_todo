@@ -1,6 +1,6 @@
-import { EvetEmitter } from "../EvetEmitter.js";
+import { EventEmitter } from "../EventEmitter.js";
 
-export class TodoListModel extends EvetEmitter {
+export class TodoListModel extends EventEmitter {
   constructor(items = []) {
     super();
     this.items = items;

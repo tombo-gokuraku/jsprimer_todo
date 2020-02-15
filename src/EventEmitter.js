@@ -1,4 +1,4 @@
-export class EvetEmitter {
+export class EventEmitter {
   constructor() {
     // 登録するイベント名・Set(リスナー関数)を管理するMap
     // ex) ['submit', [callHoge(), callPiyo()]]
