@@ -1,7 +1,8 @@
 console.log("App.js: loaded");
 import { TodoItemModel } from "./model/TodoItemModel.js";
 import { TodoListModel } from "./model/TodoListModel.js";
-import { element, render } from "./view/html-util.js";
+import { TodoListView } from "./view/TodoListView.js";
+import { render } from "./view/html-util.js";
 export class App {
   constructor() {
     console.log("App initialized");
@@ -14,32 +15,17 @@ export class App {
     const todoItemCountElement = document.querySelector("#js-todo-count");
 
     this.todoListModel.onChange(() => {
-      const todoListElement = element`<ul />`;
       const todoItems = this.todoListModel.getTodoItems();
-      todoItems.forEach(item => {
-        // 完了済みならchecked属性をつけ、未完了なら外す
-        const todoItemElement = item.completed
-          ? element`<li><input class="checkbox" type="checkbox" checked>
-            <s>${item.title}</s><button class='delete'>x</button></input></li>`
-          : element`<li><input class="checkbox" type="checkbox">${item.title}
-          <button class='delete'>x</button></input></li>`;
-        // チェックボックスがトグルした時のイベントにリスナー関数を登録
-        const inputCheckboxElement = todoItemElement.querySelector(".checkbox");
-        inputCheckboxElement.addEventListener("change", () => {
-          // 指定したTodoアイテムの状態を反転させる
-          this.todoListModel.updateTodo({
-            id: item.id,
-            completed: !item.completed
-          });
-        });
-        // 削除ボタン(x)がクリックされた時のTodoListModelからアイテムを削除する
-        const deleteButtonElement = todoItemElement.querySelector(".delete");
-        deleteButtonElement.addEventListener("click", () => {
-          this.todoListModel.deleteTodo({
-            id: item.id
-          });
-        });
-        todoListElement.appendChild(todoItemElement);
+      const todoListView = new TodoListView();
+      // todoItemsに対応するTodoListViewを作成する
+      const todoListElement = todoListView.createElement(todoItems, {
+        // Todoアイテムが更新イベントを発生した時に呼ばれるリスナー関数
+        onUpdateTodo: ({ id, completed }) => {
+          this.todoListModel.updateTodo({ id, completed });
+        },
+        onDeleteTodo: ({ id }) => {
+          this.todoListModel.deleteTodo({ id });
+        }
       });
       render(todoListElement, containerElement);
       todoItemCountElement.textContent = `Todoアイテム数: ${this.todoListModel.getTotalCount()}`;
