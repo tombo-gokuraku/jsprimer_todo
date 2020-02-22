@@ -17,7 +17,21 @@ export class App {
       const todoListElement = element`<ul />`;
       const todoItems = this.todoListModel.getTodoItems();
       todoItems.forEach(item => {
-        const todoItemElement = element`<li>${item.title}</li>`;
+        // 完了済みならchecked属性をつけ、未完了なら外す
+        const todoItemElement = item.completed
+          ? element`<li><input class="checkbox" type="checkbox" checked>
+            <s>${item.title}</s><button class='delete'>x</button></input></li>`
+          : element`<li><input class="checkbox" type="checkbox">${item.title}
+          <button class='delete'>x</button></input></li>`;
+        // チェックボックスがトグルした時のイベントにリスナー関数を登録
+        const inputCheckboxElement = todoItemElement.querySelector(".checkbox");
+        inputCheckboxElement.addEventListener("change", () => {
+          // 指定したTodoアイテムの状態を反転させる
+          this.todoListModel.updateTodo({
+            id: item.id,
+            completed: !item.completed
+          });
+        });
         todoListElement.appendChild(todoItemElement);
       });
       render(todoListElement, containerElement);
